@@ -1,66 +1,190 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Black Background Site</title>
-    <style>
-        body {
-            background-color: #000000; /* Чёрный фон */
-            color: #FFFFFF; /* Белый текст */
-            font-family: Arial, sans-serif; /* Шрифт */
-            margin: 0;
-            padding: 0;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Traffic Rewards</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-        header {
-            background-color: #1a1a1a; /* Тёмный фон для заголовка */
-            padding: 20px;
-            text-align: center;
-            border-bottom: 1px solid #333; /* Разделительная линия */
-        }
+    header {
+      background-color: #111;
+      padding: 20px;
+      text-align: center;
+      border-bottom: 1px solid #333;
+    }
 
-        h1 {
-            margin: 0;
-        }
+    h1 {
+      margin: 0;
+    }
 
-        main {
-            padding: 20px;
-        }
+    nav {
+      display: flex;
+      justify-content: center;
+      background-color: #1a1a1a;
+      border-bottom: 1px solid #333;
+    }
 
-        footer {
-            background-color: #1a1a1a;
-            color: #888888; /* Светло-серый текст */
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
+    nav button {
+      background: none;
+      color: #00ff00;
+      border: none;
+      padding: 15px 25px;
+      cursor: pointer;
+      font-size: 16px;
+    }
 
-        a {
-            color: #00ff00; /* Ярко-зелёные ссылки */
-            text-decoration: none;
-        }
+    nav button.active {
+      border-bottom: 2px solid #00ff00;
+    }
 
-        a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    main {
+      padding: 20px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .task {
+      background-color: #111;
+      border: 1px solid #333;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 10px;
+    }
+
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 5px;
+    }
+
+    input {
+      border: 1px solid #444;
+      background: #222;
+      color: #fff;
+    }
+
+    button.submit {
+      background-color: #00ff00;
+      border: none;
+      color: #000;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    footer {
+      background-color: #1a1a1a;
+      color: #888;
+      text-align: center;
+      padding: 10px;
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+    }
+  </style>
 </head>
 <body>
-    <header>
-        <h1>Добро пожаловать на сайт</h1>
-    </header>
+  <header>
+    <h1>📲 Traffic Mini App</h1>
+  </header>
 
-    <main>
-        <p>Это пример сайта с черным фоном и простым оформлением.</p>
-        <p>Вы можете изменить стили, чтобы сделать его более уникальным.</p>
-        <p>Например, <a href="#">это ссылка</a> с зелёным цветом.</p>
-    </main>
+  <nav>
+    <button class="tab-button active" data-tab="executor">👤 Исполнитель</button>
+    <button class="tab-button" data-tab="client">💼 Заказчик</button>
+  </nav>
 
-    <footer>
-        &copy; 2024 Все права защищены
-    </footer>
+  <main>
+    <section id="executor" class="tab-content active">
+      <h2>Доступные задания</h2>
+      <div id="task-list">
+        <!-- Задания будут подставлены скриптом -->
+      </div>
+      <p><strong>💰 Баланс: <span id="balance">0</span> TON</strong></p>
+    </section>
+
+    <section id="client" class="tab-content">
+      <h2>Создать задание</h2>
+      <input type="text" id="channel-link" placeholder="Ссылка на канал">
+      <input type="number" id="reward" placeholder="Награда за подписку (TON)">
+      <button class="submit" onclick="createTask()">Создать</button>
+    </section>
+  </main>
+
+  <footer>
+    &copy; 2025 Traffic Mini App
+  </footer>
+
+  <script>
+    const tasks = [
+      { id: 1, link: 'https://t.me/example', reward: 1.5 },
+      { id: 2, link: 'https://t.me/channel123', reward: 2.0 }
+    ];
+    let balance = 0;
+
+    function renderTasks() {
+      const container = document.getElementById('task-list');
+      container.innerHTML = '';
+      tasks.forEach(task => {
+        const el = document.createElement('div');
+        el.className = 'task';
+        el.innerHTML = \`
+          🔗 Канал: <a href="\${task.link}" target="_blank" style="color:#00ff00;">\${task.link}</a><br>
+          💰 Награда: \${task.reward} TON<br>
+          <button class="submit" onclick="completeTask(\${task.id})">Выполнить</button>
+        \`;
+        container.appendChild(el);
+      });
+    }
+
+    function completeTask(id) {
+      const taskIndex = tasks.findIndex(t => t.id === id);
+      if (taskIndex > -1) {
+        balance += tasks[taskIndex].reward;
+        tasks.splice(taskIndex, 1);
+        document.getElementById('balance').innerText = balance.toFixed(2);
+        renderTasks();
+      }
+    }
+
+    function createTask() {
+      const link = document.getElementById('channel-link').value;
+      const reward = parseFloat(document.getElementById('reward').value);
+      if (link && reward) {
+        tasks.push({ id: Date.now(), link, reward });
+        document.getElementById('channel-link').value = '';
+        document.getElementById('reward').value = '';
+        alert('Задание добавлено!');
+        renderTasks();
+      }
+    }
+
+    // Tabs switching
+    const tabs = document.querySelectorAll('.tab-button');
+    tabs.forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.tab).classList.add('active');
+      });
+    });
+
+    renderTasks();
+  </script>
 </body>
 </html>
+
