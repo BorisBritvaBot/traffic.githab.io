@@ -5,39 +5,45 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Traffic Mini App</title>
   <style>
+    /* Общие стили */
     body {
-      background-color: #000;
-      color: #fff;
-      font-family: Arial, sans-serif;
+      background-color: #0d0d0d;
+      color: #ffffff;
+      font-family: 'Helvetica Neue', sans-serif;
       margin: 0;
       padding: 0;
     }
 
     header {
-      background-color: #111;
+      background-color: #121212;
       padding: 20px;
       text-align: center;
-      border-bottom: 1px solid #333;
+      border-bottom: 1px solid #222;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
     }
 
     nav {
       display: flex;
-      justify-content: center;
-      background-color: #1a1a1a;
+      justify-content: space-around;
+      background-color: #181818;
       border-bottom: 1px solid #333;
+      padding: 10px 0;
     }
 
     nav button {
       background: none;
-      color: #00ff00;
+      color: #aaa;
       border: none;
-      padding: 15px 25px;
-      cursor: pointer;
       font-size: 16px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
     }
 
-    nav button.active {
-      border-bottom: 2px solid #00ff00;
+    nav button.active,
+    nav button:hover {
+      color: #FFFFFF;
+      border-bottom: 2px solid #FFFFFF;
     }
 
     main {
@@ -50,52 +56,64 @@
 
     .tab-content.active {
       display: block;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
     }
 
     .task {
-      background-color: #111;
+      background-color: #1e1e1e;
       border: 1px solid #333;
       padding: 15px;
       margin-bottom: 10px;
-      border-radius: 10px;
+      border-radius: 12px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.4);
     }
 
-    input, button {
-      padding: 10px;
-      margin: 5px 0;
+    input, button.submit {
+      display: block;
       width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      font-size: 16px;
       box-sizing: border-box;
-      border-radius: 5px;
     }
 
     input {
+      background: #2a2a2a;
       border: 1px solid #444;
-      background: #222;
       color: #fff;
     }
 
     button.submit {
-      background-color: #00ff00;
+      background-color: #000000;
+      color: #FFFFFF;
       border: none;
-      color: #000;
       font-weight: bold;
       cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    button.submit:hover {
+      background-color: #00e68a;
     }
 
     footer {
-      background-color: #1a1a1a;
-      color: #888;
+      background-color: #121212;
+      color: #666;
       text-align: center;
       padding: 10px;
-      position: fixed;
-      bottom: 0;
-      width: 100%;
+      font-size: 14px;
     }
   </style>
 </head>
 <body>
   <header>
-    <h1>📲 Traffic Mini App</h1>
+    <h1>🚀 Traffic Mini App</h1>
   </header>
 
   <nav>
@@ -104,105 +122,102 @@
   </nav>
 
   <main>
-    <!-- Исполнитель -->
     <section id="executor" class="tab-content active">
-      <h2>Доступные задания</h2>
+      <h2>🎯 Доступные задания</h2>
       <div id="task-list"></div>
       <p><strong>💰 Ваш баланс: <span id="balance">0</span> TON</strong></p>
     </section>
 
-    <!-- Заказчик -->
     <section id="client" class="tab-content">
-      <h2>Создание задания</h2>
+      <h2>📢 Создание задания</h2>
       <p><strong>💼 Баланс заказчика: <span id="client-balance">0</span> TON</strong></p>
       <button class="submit" onclick="topUp()">➕ Пополнить баланс</button>
 
       <input type="text" id="channel-link" placeholder="Ссылка на ваш канал">
       <input type="number" id="reward" placeholder="Награда за подписку (TON)">
-      <button class="submit" onclick="createTask()">Создать задание</button>
+      <button class="submit" onclick="createTask()">📨 Создать задание</button>
     </section>
   </main>
 
   <footer>
-    &copy; 2025 Traffic Mini App
+    &copy; 2025 Traffic Mini App — Все права защищены
   </footer>
 
   <script>
-  let userBalance = 0;
-  let clientBalance = 0;
-  const tasks = [
-    { id: 1, link: 'https://t.me/example', reward: 1.5 },
-    { id: 2, link: 'https://t.me/channel123', reward: 2.0 }
-  ];
+    let userBalance = 0;
+    let clientBalance = 0;
+    const tasks = [
+      { id: 1, link: 'https://t.me/example', reward: 1.5 },
+      { id: 2, link: 'https://t.me/channel123', reward: 2.0 }
+    ];
 
-  function renderTasks() {
-    const container = document.getElementById('task-list');
-    container.innerHTML = '';
-    tasks.forEach(task => {
-      const el = document.createElement('div');
-      el.className = 'task';
-      el.innerHTML = `
-        🔗 Канал: <a href="${task.link}" target="_blank" style="color:#00ff00;">${task.link}</a><br>
-        💰 Награда: ${task.reward} TON<br>
-        <button class="submit" onclick="completeTask(${task.id})">Выполнить</button>
-      `;
-      container.appendChild(el);
-    });
-  }
-
-  function completeTask(id) {
-    const taskIndex = tasks.findIndex(t => t.id === id);
-    if (taskIndex > -1) {
-      userBalance += tasks[taskIndex].reward;
-      tasks.splice(taskIndex, 1);
-      document.getElementById('balance').innerText = userBalance.toFixed(2);
-      renderTasks();
-    }
-  }
-
-  function createTask() {
-    const link = document.getElementById('channel-link').value;
-    const reward = parseFloat(document.getElementById('reward').value);
-    if (link && reward && clientBalance >= reward) {
-      tasks.push({ id: Date.now(), link, reward });
-      clientBalance -= reward;
-      document.getElementById('channel-link').value = '';
-      document.getElementById('reward').value = '';
-      document.getElementById('client-balance').innerText = clientBalance.toFixed(2);
-      alert('Задание создано!');
-      renderTasks();
-    } else {
-      alert('Недостаточно средств или данные не заполнены');
-    }
-  }
-
-  function topUp() {
-    const amount = parseFloat(prompt('Введите сумму пополнения в TON:'));
-    if (!isNaN(amount) && amount > 0) {
-      clientBalance += amount;
-      document.getElementById('client-balance').innerText = clientBalance.toFixed(2);
-    }
-  }
-
-  // Инициализация вкладок после загрузки DOM
-  window.onload = () => {
-    renderTasks();
-
-    const tabButtons = document.querySelectorAll('.tab-button');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    tabButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        tabButtons.forEach(b => b.classList.remove('active'));
-        tabContents.forEach(tc => tc.classList.remove('active'));
-
-        btn.classList.add('active');
-        const selectedTab = btn.getAttribute('data-tab');
-        document.getElementById(selectedTab).classList.add('active');
+    function renderTasks() {
+      const container = document.getElementById('task-list');
+      container.innerHTML = '';
+      tasks.forEach(task => {
+        const el = document.createElement('div');
+        el.className = 'task';
+        el.innerHTML = `
+          🔗 Канал: <a href="${task.link}" target="_blank" style="color:#00ff99;">${task.link}</a><br>
+          💰 Награда: ${task.reward} TON<br>
+          <button class="submit" onclick="completeTask(${task.id})">✅ Выполнить</button>
+        `;
+        container.appendChild(el);
       });
-    });
-  };
-</script>
+    }
+
+    function completeTask(id) {
+      const taskIndex = tasks.findIndex(t => t.id === id);
+      if (taskIndex > -1) {
+        userBalance += tasks[taskIndex].reward;
+        tasks.splice(taskIndex, 1);
+        document.getElementById('balance').innerText = userBalance.toFixed(2);
+        renderTasks();
+      }
+    }
+
+    function createTask() {
+      const link = document.getElementById('channel-link').value;
+      const reward = parseFloat(document.getElementById('reward').value);
+      if (link && reward && clientBalance >= reward) {
+        tasks.push({ id: Date.now(), link, reward });
+        clientBalance -= reward;
+        document.getElementById('channel-link').value = '';
+        document.getElementById('reward').value = '';
+        document.getElementById('client-balance').innerText = clientBalance.toFixed(2);
+        alert('Задание создано!');
+        renderTasks();
+      } else {
+        alert('Недостаточно средств или данные не заполнены');
+      }
+    }
+
+    function topUp() {
+      const amount = parseFloat(prompt('Введите сумму пополнения в TON:'));
+      if (!isNaN(amount) && amount > 0) {
+        clientBalance += amount;
+        document.getElementById('client-balance').innerText = clientBalance.toFixed(2);
+      }
+    }
+
+    window.onload = () => {
+      renderTasks();
+
+      const tabButtons = document.querySelectorAll('.tab-button');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          tabButtons.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(tc => tc.classList.remove('active'));
+
+          btn.classList.add('active');
+          const selectedTab = btn.getAttribute('data-tab');
+          document.getElementById(selectedTab).classList.add('active');
+        });
+      });
+    };
+  </script>
 </body>
 </html>
 
