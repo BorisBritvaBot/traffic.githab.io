@@ -8,7 +8,7 @@
     body {
       background-color: #000000;
       color: #FFFFFF;
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Courier New', monospace;
       margin: 0;
       padding: 0;
     }
@@ -20,31 +20,9 @@
       font-weight: bold;
     }
 
-    nav {
-      display: flex;
-      justify-content: center;
-      background-color: #000000;
-      border-bottom: 1px solid #000000;
-    }
-
-    nav button {
-      flex: 1;
-      background: none;
-      border: none;
-      padding: 12px;
-      font-size: 16px;
-      cursor: pointer;
-      color: #666;
-      border-bottom: 2px solid transparent;
-    }
-
-    nav button.active {
-      color: #FFFFFF;
-      border-bottom: 2px solid #FFFFFF;
-    }
-
     main {
       padding: 16px;
+      padding-bottom: 80px; /* место под нижнюю навигацию */
       max-width: 480px;
       margin: 0 auto;
     }
@@ -58,7 +36,7 @@
     }
 
     .task {
-      background: #000000;
+      background: #191919;
       border-radius: 16px;
       padding: 16px;
       margin-bottom: 16px;
@@ -80,8 +58,8 @@
     }
 
     .mini-btn {
-      background-color: #FFFFFF;
-      color: #000000;
+      background-color: #252525;
+      color: #FFFFFF;
       border: none;
       border-radius: 12px;
       padding: 10px 16px;
@@ -94,14 +72,14 @@
       margin-top: 12px;
       padding: 14px;
       border-radius: 12px;
-      border: 1px solid #ссс;
+      border: 1px solid #ccc;
       font-size: 16px;
       box-sizing: border-box;
     }
 
     button.submit {
-      background-color: #0072f0;
-      color: #000000;
+      background-color: #191919;
+      color: #FFFFFF;
       border: none;
       font-weight: bold;
     }
@@ -112,24 +90,58 @@
       color: #aaa;
       font-size: 14px;
     }
+
+    /* Нижняя навигация */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background-color: #000;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 0;
+      border-top: 1px solid #111;
+    }
+
+    .nav-item {
+      background: none;
+      border: none;
+      color: #777;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+      cursor: pointer;
+    }
+
+    .nav-item img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .nav-item.active {
+      color: #fff;
+    }
+
+    .nav-item.active img {
+      filter: brightness(2);
+    }
   </style>
 </head>
 <body>
   <header>🚀 Traffic Mini App</header>
-
-  <nav>
-    <button class="tab-button active" data-tab="executor">Задания</button>
-    <button class="tab-button" data-tab="client">Реклама</button>
-  </nav>
+  <p style="text-align:center;"><strong>💰 Ваш баланс: <span id="balance">0</span> TON</strong></p>
 
   <main>
-    <section id="executor" class="tab-content active">
+    <section id="Задания" class="tab-content active">
       <h3>🎯 Доступные задания</h3>
       <div id="task-list"></div>
-      <p><strong>💰 Ваш баланс: <span id="balance">0</span> TON</strong></p>
     </section>
 
-    <section id="client" class="tab-content">
+    <section id="Реклама" class="tab-content">
       <h3>📢 Создание задания</h3>
       <p><strong>💼 Баланс заказчика: <span id="client-balance">0</span> TON</strong></p>
       <button class="submit" onclick="topUp()">➕ Пополнить баланс</button>
@@ -138,9 +150,29 @@
       <input type="number" id="reward" placeholder="Награда за подписку (TON)">
       <button class="submit" onclick="createTask()">📨 Создать задание</button>
     </section>
+
+    <section id="packs" class="tab-content">
+      <h3>🧩 Дополнительный раздел</h3>
+      <p>Здесь будет третий раздел. Можно добавить аналитику, настройки и т.п.</p>
+    </section>
   </main>
 
   <footer>&copy; 2025 Traffic Mini App</footer>
+
+  <nav class="bottom-nav">
+    <button class="nav-item active" data-tab="Задания">
+      <img src="https://img.icons8.com/ios-filled/50/ffffff/home.png" alt="Задания">
+      <span>Задания</span>
+    </button>
+    <button class="nav-item" data-tab="Реклама">
+      <img src="https://img.icons8.com/ios-filled/50/ffffff/controller.png" alt="Реклама">
+      <span>Реклама</span>
+    </button>
+    <button class="nav-item" data-tab="packs">
+      <img src="https://img.icons8.com/ios-filled/50/ffffff/group.png" alt="Packs">
+      <span>Packs</span>
+    </button>
+  </nav>
 
   <script>
     let userBalance = 0;
@@ -204,12 +236,12 @@
     window.onload = () => {
       renderTasks();
 
-      const tabButtons = document.querySelectorAll('.tab-button');
+      const navItems = document.querySelectorAll('.nav-item');
       const tabContents = document.querySelectorAll('.tab-content');
 
-      tabButtons.forEach(btn => {
+      navItems.forEach(btn => {
         btn.addEventListener('click', () => {
-          tabButtons.forEach(b => b.classList.remove('active'));
+          navItems.forEach(b => b.classList.remove('active'));
           tabContents.forEach(tc => tc.classList.remove('active'));
 
           btn.classList.add('active');
