@@ -25,6 +25,7 @@
       padding-bottom: 80px; /* место под нижнюю навигацию */
       max-width: 480px;
       margin: 0 auto;
+      margin-top: -10px;
     }
 
     .tab-content {
@@ -140,10 +141,9 @@
   <header>Traffic Mini App</header>
 
   <div style="text-align:center; margin-top: -10px; margin-bottom: 5px;">
-  <img src="https://i.ibb.co/ZRBC4x4S/traff.png" alt="Лого" style="width: 30px; height: auto;">
   </div>
 
-  <p style="text-align:center;"><strong>💰 Ваш баланс: <span id="balance">0</span> TON</strong></p>
+  <p style="text-align:center; margin-top: 5px; margin-bottom: 5px;"><strong><img src="https://i.ibb.co/PZZh0QkN/trf.png" alt="Coin" style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">Ваш баланс: <span id="balance">0</span> TRF</strong></p>
 
   <main>
     <section id="Задания" class="tab-content active">
@@ -153,7 +153,7 @@
 
     <section id="Реклама" class="tab-content">
       <h3>Создание задания</h3>
-      <p><strong>💼 Баланс заказчика: <span id="client-balance">0</span> TON</strong></p>
+      <p><strong>💼 Баланс заказчика: <span id="client-balance">0</span> TRF</strong></p>
       <button class="submit" onclick="topUp()">➕ Пополнить баланс</button>
 
       <input type="text" id="channel-link" placeholder="Ссылка на ваш канал">
@@ -206,8 +206,8 @@
         el.className = 'task';
         el.innerHTML = `
           <div class="task-info">
-            🔗 <a href="${task.link}" target="_blank">${task.link}</a><br>
-            💰 ${task.reward} TON
+            🗯 <a href="${task.link}" target="_blank">${task.link}</a><br>
+            💰 ${task.reward} TRF
           </div>
           <button class="mini-btn" onclick="completeTask(${task.id})">Выполнить</button>
         `;
@@ -242,7 +242,7 @@
     }
 
     function topUp() {
-      const amount = parseFloat(prompt('Введите сумму пополнения в TON:'));
+      const amount = parseFloat(prompt('Введите сумму пополнения в TRF:'));
       if (!isNaN(amount) && amount > 0) {
         clientBalance += amount;
         document.getElementById('client-balance').innerText = clientBalance.toFixed(2);
