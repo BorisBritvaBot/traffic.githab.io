@@ -58,7 +58,7 @@
     }
 
     .mini-btn {
-      background-color: #272727;
+      background-color: #313131;
       color: #FFFFFF;
       border: none;
       border-radius: 12px;
@@ -97,11 +97,14 @@
       bottom: 0;
       left: 0;
       right: 0;
-      background-color: #000;
+      background-color: rgba(15, 15, 15, 0.6); /* полупрозрачный фон */
+      backdrop-filter: blur(12px);             /* размытие */
+      -webkit-backdrop-filter: blur(12px);     /* для Safari */
       display: flex;
       justify-content: space-around;
       padding: 10px 0;
       border-top: 1px solid #111;
+      z-index: 10;
     }
 
     .nav-item {
@@ -120,14 +123,16 @@
     .nav-item img {
       width: 24px;
       height: 24px;
+      opacity: 0.5; /* Тусклая иконка по умолчанию */
+      transition: opacity 0.3s ease;
     }
 
     .nav-item.active {
-      color: #fff;
+      color: #ffffff;
     }
 
     .nav-item.active img {
-      filter: brightness(2);
+      opacity: 1; /* Яркая иконка, если вкладка активна */
     }
   </style>
 </head>
